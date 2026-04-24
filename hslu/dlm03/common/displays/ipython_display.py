@@ -140,7 +140,10 @@ class IPythonChatDisplay(chat_display.ChatDisplay):
         try:
             message = ET.fromstring("<div>" + markdown.markdown(text) + "</div>")  # noqa: S314
         except Exception: # noqa: BLE001
-            message = ET.fromstring("<div>" + html.escape(text) + "</div>")  # noqa: S314
+            try:
+                message = ET.fromstring("<div>" + html.escape(text) + "</div>")  # noqa: S314
+            except Exception:
+                message = ET.fromstring("<div>&lt;unreadable content&gt;</div>")
         element.append(message)
 
         self._html.append(element)
